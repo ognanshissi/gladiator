@@ -1,0 +1,53 @@
+<div class="container-fluid" style="padding: 0; margin: 0;">
+    <div id="navbar">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ path('homepage', {template_name: template_name, api_key: api_key}) }}">
+                    <img height="20" src="https://www.hellomonweb.net/uploads/{{ config.logo }}"
+                         alt="{{ config.title }} logo">
+                </a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <!-- page -->
+                    {% for link in menu %}
+
+                        {% if link.page_key == 'accueil' %}
+                            <li>
+                                <a href="{{ path('homepage', {template_name: template_name, api_key: link.api_key}) }}">{{ link.page_name }}</a>
+                            </li>
+                        {% else %}
+                            {% if link.children is not empty %}
+                                <li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                       aria-haspopup="true" aria-expanded="false">{{ link.page_name }} <span
+                                                class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        {% for sub in link.children %}
+                                            <li><a href="{{ path('page', {template_name: template_name, api_key: sub.secret_key, page_name: sub.category_name}) }}">{{ sub.category_name }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{{ path('page', {template_name: template_name, api_key: link.api_key, page_name: link.page_key}) }}">{{ link.page_name }}</a>
+                                </li>
+                            {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+                    <!-- page -->
+                </ul>
+                {{ include(template_name ~ '/components/_search_form.html.twig') }}
+            </div>
+            <!-- /.navbar-collapse -->
+        </nav>
+    </div>
+</div>
